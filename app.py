@@ -149,33 +149,68 @@ footer {{
 }}
 
 
-/* Two-column container styling */
-div[data-testid="stHorizontalBlock"] {{
+/* Outer Site Layout Column Styling */
+.st-key-site_layout div[data-testid="stHorizontalBlock"]:first-of-type {{
     gap: 0px !important;
 }}
 
-/* Navigation column (#navigationMenu) */
-div[data-testid="stHorizontalBlock"] > div[data-testid="column"]:first-child {{
-    background: linear-gradient(to bottom, rgba(26,26,26,.90), rgba(20,20,20,.92) 95%) !important;
+/* Outer Navigation column (#navigationMenu) */
+.st-key-site_layout div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:first-child {{
+    background: linear-gradient(to bottom, rgba(26,26,26,.92), rgba(20,20,20,.95) 95%) !important;
     border-left: 1px solid #4b4b4b !important;
     border-right: 1px solid #4b4b4b !important;
     border-bottom: 1px solid #4b4b4b !important;
-    border-bottom-left-radius: 35px !important;
-    padding: 12px 10px 18px 10px !important;
+    border-radius: 0px !important;
+    padding: 14px 12px 20px 12px !important;
     box-shadow: rgba(0,0,0,.5) 0 14px 28px, rgba(0,0,0,.4) 0 10px 10px !important;
 }}
 
-/* Main Content column (#mainContent) */
-div[data-testid="stHorizontalBlock"] > div[data-testid="column"]:last-child {{
-    background: rgba(28, 28, 28, 0.85) !important;
+/* Outer Main Content column (#mainContent) */
+.st-key-site_layout div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="column"]:last-child {{
+    background: rgba(28, 28, 28, 0.88) !important;
     border-right: 1px solid #3b3b3b !important;
     border-bottom: 1px solid #3b3b3b !important;
     border-left: 1px solid #222222 !important;
-    border-bottom-right-radius: 35px !important;
-    padding: 14px 18px 22px 18px !important;
+    border-radius: 0px !important;
+    padding: 22px 30px 28px 30px !important;
     box-shadow: rgba(0,0,0,.5) 0 14px 28px, rgba(0,0,0,.4) 0 10px 10px !important;
     color: #dadada !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
 }}
+
+/* Content body container ensuring clean 100% box-model without overflow */
+.st-key-tab_content_body {{
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+}}
+
+.st-key-tab_content_body div[data-testid="stElementContainer"] {{
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}}
+
+/* Reset and ensure inner nested columns are transparent and well-spaced */
+.st-key-tab_content_body div[data-testid="stHorizontalBlock"] {{
+    gap: 16px !important;
+    margin: 8px 0 14px 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}}
+
+.st-key-tab_content_body div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {{
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0px !important;
+    box-shadow: none !important;
+    padding: 0px !important;
+    box-sizing: border-box !important;
+}}
+
 
 /* Frutiger Aero Navigation Boxes & Titles */
 .nav-categories {{
@@ -307,6 +342,8 @@ h1, h2, h3, [data-testid="stHeadingWithActionElements"] h1, [data-testid="stHead
     margin-top: 8px !important;
     margin-bottom: 0px !important;
     letter-spacing: 0.3px !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
 }}
 
 /* Skeuomorphic Glass Container (.styled-containers) */
@@ -321,12 +358,16 @@ h1, h2, h3, [data-testid="stHeadingWithActionElements"] h1, [data-testid="stHead
     color: #dadada !important;
     font-size: 13.5px;
     line-height: 1.6;
+    box-sizing: border-box !important;
+    width: 100% !important;
 }}
 
 /* Full borders when not directly under a header */
 .styled-containers-full {{
     border-top: 1px solid rgba(236,242,249,.2);
     border-radius: 3px;
+    box-sizing: border-box !important;
+    width: 100% !important;
 }}
 
 /* Authentic Windows Longhorn Green Skeuomorphic Buttons */
@@ -644,7 +685,8 @@ st.markdown(header_html, unsafe_allow_html=True)
 # ---------------------------------------------------------------------------
 # Main 2-Column Layout
 # ---------------------------------------------------------------------------
-left_col, right_col = st.columns([1, 2.75], gap="small")
+with st.container(key="site_layout"):
+    left_col, right_col = st.columns([1, 2.75], gap="small")
 
 # ---------------------------------------------------------------------------
 # Left Column: Navigation & Identity (Direct frutigeraeroarchive.org design)
@@ -713,153 +755,154 @@ with left_col:
 # Right Column: Main Content Area
 # ---------------------------------------------------------------------------
 with right_col:
-    # -----------------------------------------------------------------------
-    # PAGE 1: Introduction
-    # -----------------------------------------------------------------------
-    if current_page == "Introduction":
-        st.markdown("<h1>Introduction</h1>", unsafe_allow_html=True)
-        st.markdown(
-            f"""
-            <div class="styled-containers">
-                <p style="margin-bottom: 8px;">
-                    Hi, I'm <strong>Jairus</strong>. {TAGLINE}.
-                </p>
-                <p>
-                    Welcome to my personal archive and portfolio. I enjoy building things from scratch, 
-                    competing in cybersecurity CTFs, exploring network hardware, and working toward 
-                    sustainable, community-focused technology. Explore my autobiography, technical skills, 
-                    and completed projects using the menu on the left.
-                </p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-        st.markdown("<h2>Academic & Competition Highlights</h2>", unsafe_allow_html=True)
-        # Using [1, 1, 1.45] ensures Team Champion NEVER truncates
-        m1, m2, m3 = st.columns([1, 1, 1.45])
-        with m1:
-            st.metric("Academic Year", YEAR)
-        with m2:
-            st.metric("Projects Built", f"{len(PROJECTS)} Completed")
-        with m3:
-            st.metric("Regional CTF", "Team Champion")
-
-        st.markdown("<h2>Quick Overview</h2>", unsafe_allow_html=True)
-        st.markdown(
-            """
-            <div class="styled-containers">
-                <p><strong>Background:</strong> Born and raised in Naga, Cebu; currently surviving 3rd-year CS at CIT-U.</p>
-                <p style="margin-top: 6px;"><strong>Core Principle:</strong> Honesty to myself above all other values.</p>
-                <p style="margin-top: 6px;"><strong>Key Affiliations:</strong> The Technologian Student Press, Computer Student Society, and CIT-U CTF Club.</p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    # -----------------------------------------------------------------------
-    # PAGE 2: Autobiography
-    # -----------------------------------------------------------------------
-    elif current_page == "Autobiography":
-        st.markdown("<h1>Autobiography & History</h1>", unsafe_allow_html=True)
-        
-        st.markdown("<h2>Background</h2>", unsafe_allow_html=True)
-        st.markdown(f'<div class="styled-containers"><p>{BACKGROUND}</p></div>', unsafe_allow_html=True)
-
-        st.markdown("<h2>Education</h2>", unsafe_allow_html=True)
-        st.markdown(f'<div class="styled-containers"><p>{EDUCATION}</p></div>', unsafe_allow_html=True)
-
-        st.markdown("<h2>Beyond Class</h2>", unsafe_allow_html=True)
-        st.markdown(f'<div class="styled-containers"><p>{BEYOND_CLASS}</p></div>', unsafe_allow_html=True)
-
-        st.markdown("<h2>Core Philosophy</h2>", unsafe_allow_html=True)
-        st.markdown(f'<div class="styled-containers"><p>{BELIEF}</p></div>', unsafe_allow_html=True)
-
-        st.markdown("<h2>Interests & Pursuits</h2>", unsafe_allow_html=True)
-        with st.container():
-            picked = st.multiselect(
-                "Filter interest categories:",
-                options=list(INTERESTS.keys()),
-                default=list(INTERESTS.keys()),
-            )
-            interests_html = '<div class="styled-containers">'
-            for cat in picked:
-                interests_html += f'<div style="font-weight:700; color:#57fa6f; margin-top:4px;">{cat}</div><ul style="margin:2px 0 8px 18px; padding:0;">'
-                for item in INTERESTS[cat]:
-                    interests_html += f'<li style="color:#dadada;">{item}</li>'
-                interests_html += '</ul>'
-            interests_html += '</div>'
-            st.markdown(interests_html, unsafe_allow_html=True)
-
-        st.markdown("<h2>Milestones</h2>", unsafe_allow_html=True)
-        st.table(MILESTONES.set_index("Year"))
-
-        st.markdown("<h2>Where I'm Headed</h2>", unsafe_allow_html=True)
-        st.markdown(
-            '<div class="styled-containers">'
-            '<p>I have both a long-term grand vision and a personal day-to-day commitment to technology and self-reliance.</p>'
-            '</div>',
-            unsafe_allow_html=True,
-        )
-
-        col_d1, col_d2 = st.columns([1, 1])
-        with col_d1:
-            if st.button("Reveal Big Dream", use_container_width=True):
-                st.session_state.show_dream = not st.session_state.show_dream
-        with col_d2:
-            autobio_txt = (
-                f"{NAME}\n{PROGRAM}, {YEAR}, Section {SECTION}\n{SCHOOL}\n\n"
-                f"BACKGROUND\n{BACKGROUND}\n\n"
-                f"EDUCATION\n{EDUCATION.replace('<strong>', '').replace('</strong>', '').replace('<br>', chr(10))}\n\n"
-                f"CORE PHILOSOPHY\n{BELIEF.replace('<strong>', '').replace('</strong>', '')}\n\n"
-                f"WHERE I'M HEADED\n{DREAM}\n"
-            )
-            st.download_button(
-                "Download Autobiography (.txt)",
-                data=autobio_txt,
-                file_name="jairus_colindres_autobiography.txt",
-                mime="text/plain",
-                use_container_width=True,
-            )
-
-        if st.session_state.show_dream:
+    with st.container(key="tab_content_body"):
+        # -----------------------------------------------------------------------
+        # PAGE 1: Introduction
+        # -----------------------------------------------------------------------
+        if current_page == "Introduction":
+            st.markdown("<h1>Introduction</h1>", unsafe_allow_html=True)
             st.markdown(
                 f"""
-                <div class="styled-containers styled-containers-full" style="border-left: 3px solid #3cda56; margin-top: 10px; background: rgba(20, 35, 20, 0.85);">
-                    <div style="font-weight: 700; color: #57fa6f; margin-bottom: 4px;">Vision & Community Horizon</div>
-                    <p style="margin: 0;">{DREAM}</p>
+                <div class="styled-containers">
+                    <p style="margin-bottom: 8px;">
+                        Hi, I'm <strong>Jairus</strong>. {TAGLINE}.
+                    </p>
+                    <p>
+                        Welcome to my personal archive and portfolio. I enjoy building things from scratch, 
+                        competing in cybersecurity CTFs, exploring network hardware, and working toward 
+                        sustainable, community-focused technology. Explore my autobiography, technical skills, 
+                        and completed projects using the menu on the left.
+                    </p>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
 
-    # -----------------------------------------------------------------------
-    # PAGE 3: Skills & Stack
-    # -----------------------------------------------------------------------
-    elif current_page == "Skills":
-        st.markdown("<h1>Skills & Stack</h1>", unsafe_allow_html=True)
-        st.markdown(
-            """
-            <div class="styled-containers">
-                <p>
-                    Python and web development are my strongest skills, followed by capture the flag (CTF). 
-                    Hardware hacking is the domain I'm currently exploring. The values below reflect self-ratings out of 100.
-                </p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+            st.markdown("<h2>Academic & Competition Highlights</h2>", unsafe_allow_html=True)
+            # Using [1, 1, 1.45] ensures Team Champion NEVER truncates
+            m1, m2, m3 = st.columns([1, 1, 1.45], gap="medium")
+            with m1:
+                st.metric("Academic Year", YEAR)
+            with m2:
+                st.metric("Projects Built", f"{len(PROJECTS)} Completed")
+            with m3:
+                st.metric("Regional CTF", "Team Champion")
 
-        ctrl_col, chart_col = st.columns([1, 2], gap="medium")
-        with ctrl_col:
-            st.markdown("<h2>Filters</h2>", unsafe_allow_html=True)
-            min_lvl = st.slider("Min Proficiency", 0, 100, 0, step=10)
-            sort_choice = st.selectbox("Sort Order", ["Highest first", "Lowest first", "Alphabetical"])
-            chart_kind = st.radio("Chart Type", ["Bar Chart", "Area Chart"], horizontal=True)
-            show_tbl = st.checkbox("Show Data Table", value=True)
+            st.markdown("<h2>Quick Overview</h2>", unsafe_allow_html=True)
+            st.markdown(
+                """
+                <div class="styled-containers">
+                    <p><strong>Background:</strong> Born and raised in Naga, Cebu; currently surviving 3rd-year CS at CIT-U.</p>
+                    <p style="margin-top: 6px;"><strong>Core Principle:</strong> Honesty to myself above all other values.</p>
+                    <p style="margin-top: 6px;"><strong>Key Affiliations:</strong> The Technologian Student Press, Computer Student Society, and CIT-U CTF Club.</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
-        with chart_col:
-            st.markdown("<h2>Visualization</h2>", unsafe_allow_html=True)
+        # -----------------------------------------------------------------------
+        # PAGE 2: Autobiography
+        # -----------------------------------------------------------------------
+        elif current_page == "Autobiography":
+            st.markdown("<h1>Autobiography & History</h1>", unsafe_allow_html=True)
+        
+            st.markdown("<h2>Background</h2>", unsafe_allow_html=True)
+            st.markdown(f'<div class="styled-containers"><p>{BACKGROUND}</p></div>', unsafe_allow_html=True)
+
+            st.markdown("<h2>Education</h2>", unsafe_allow_html=True)
+            st.markdown(f'<div class="styled-containers"><p>{EDUCATION}</p></div>', unsafe_allow_html=True)
+
+            st.markdown("<h2>Beyond Class</h2>", unsafe_allow_html=True)
+            st.markdown(f'<div class="styled-containers"><p>{BEYOND_CLASS}</p></div>', unsafe_allow_html=True)
+
+            st.markdown("<h2>Core Philosophy</h2>", unsafe_allow_html=True)
+            st.markdown(f'<div class="styled-containers"><p>{BELIEF}</p></div>', unsafe_allow_html=True)
+
+            st.markdown("<h2>Interests & Pursuits</h2>", unsafe_allow_html=True)
+            with st.container():
+                picked = st.multiselect(
+                    "Filter interest categories:",
+                    options=list(INTERESTS.keys()),
+                    default=list(INTERESTS.keys()),
+                )
+                interests_html = '<div class="styled-containers">'
+                for cat in picked:
+                    interests_html += f'<div style="font-weight:700; color:#57fa6f; margin-top:4px;">{cat}</div><ul style="margin:2px 0 8px 18px; padding:0;">'
+                    for item in INTERESTS[cat]:
+                        interests_html += f'<li style="color:#dadada;">{item}</li>'
+                    interests_html += '</ul>'
+                interests_html += '</div>'
+                st.markdown(interests_html, unsafe_allow_html=True)
+
+            st.markdown("<h2>Milestones</h2>", unsafe_allow_html=True)
+            st.table(MILESTONES.set_index("Year"))
+
+            st.markdown("<h2>Where I'm Headed</h2>", unsafe_allow_html=True)
+            st.markdown(
+                '<div class="styled-containers">'
+                '<p>I have both a long-term grand vision and a personal day-to-day commitment to technology and self-reliance.</p>'
+                '</div>',
+                unsafe_allow_html=True,
+            )
+
+            col_d1, col_d2 = st.columns([1, 1], gap="medium")
+            with col_d1:
+                if st.button("Reveal Big Dream", use_container_width=True):
+                    st.session_state.show_dream = not st.session_state.show_dream
+            with col_d2:
+                autobio_txt = (
+                    f"{NAME}\n{PROGRAM}, {YEAR}, Section {SECTION}\n{SCHOOL}\n\n"
+                    f"BACKGROUND\n{BACKGROUND}\n\n"
+                    f"EDUCATION\n{EDUCATION.replace('<strong>', '').replace('</strong>', '').replace('<br>', chr(10))}\n\n"
+                    f"CORE PHILOSOPHY\n{BELIEF.replace('<strong>', '').replace('</strong>', '')}\n\n"
+                    f"WHERE I'M HEADED\n{DREAM}\n"
+                )
+                st.download_button(
+                    "Download Autobiography (.txt)",
+                    data=autobio_txt,
+                    file_name="jairus_colindres_autobiography.txt",
+                    mime="text/plain",
+                    use_container_width=True,
+                )
+
+            if st.session_state.show_dream:
+                st.markdown(
+                    f"""
+                    <div class="styled-containers styled-containers-full" style="border-left: 3px solid #3cda56; margin-top: 10px; background: rgba(20, 35, 20, 0.85);">
+                        <div style="font-weight: 700; color: #57fa6f; margin-bottom: 4px;">Vision & Community Horizon</div>
+                        <p style="margin: 0;">{DREAM}</p>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+        # -----------------------------------------------------------------------
+        # PAGE 3: Skills & Stack
+        # -----------------------------------------------------------------------
+        elif current_page == "Skills":
+            st.markdown("<h1>Skills & Stack</h1>", unsafe_allow_html=True)
+            st.markdown(
+                """
+                <div class="styled-containers">
+                    <p>
+                        Python and web development are my strongest skills, followed by capture the flag (CTF). 
+                        Hardware hacking is the domain I'm currently exploring. The values below reflect self-ratings out of 100.
+                    </p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+            st.markdown("<h2>Filter & Controls</h2>", unsafe_allow_html=True)
+            f_c1, f_c2, f_c3 = st.columns([1.3, 1.1, 1], gap="medium")
+            with f_c1:
+                min_lvl = st.slider("Min Proficiency (%)", 0, 100, 0, step=10)
+            with f_c2:
+                sort_choice = st.selectbox("Sort Order", ["Highest first", "Lowest first", "Alphabetical"])
+            with f_c3:
+                chart_kind = st.selectbox("Chart Type", ["Bar Chart", "Area Chart"])
+                show_tbl = st.checkbox("Show Data Table", value=True)
+
             filtered = SKILLS[SKILLS["Level"] >= min_lvl].copy()
             if sort_choice == "Highest first":
                 filtered = filtered.sort_values("Level", ascending=False)
@@ -868,16 +911,25 @@ with right_col:
             else:
                 filtered = filtered.sort_values("Skill")
 
+            st.markdown("<h2>Proficiency Visualization</h2>", unsafe_allow_html=True)
             if filtered.empty:
                 st.warning("No skills match the specified threshold.")
             else:
-                st.metric("Average Proficiency", f"{np.mean(filtered['Level']):.0f} / 100")
+                m_col1, m_col2 = st.columns([1, 1], gap="medium")
+                with m_col1:
+                    st.metric("Average Proficiency", f"{np.mean(filtered['Level']):.0f} / 100")
+                with m_col2:
+                    top_skill = filtered.iloc[0]["Skill"] if not filtered.empty else "None"
+                    st.metric("Top Filtered Skill", top_skill)
+
                 series_data = filtered.set_index("Skill")["Level"]
                 if chart_kind == "Bar Chart":
                     st.bar_chart(series_data, color="#3cda56")
                 else:
                     st.area_chart(series_data, color="#3cda56")
+
                 if show_tbl:
+                    st.markdown("<h2>Skill Data Table</h2>", unsafe_allow_html=True)
                     st.dataframe(
                         filtered,
                         hide_index=True,
@@ -889,96 +941,96 @@ with right_col:
                         },
                     )
 
-    # -----------------------------------------------------------------------
-    # PAGE 4: Projects
-    # -----------------------------------------------------------------------
-    elif current_page == "Projects":
-        st.markdown("<h1>Projects & Works</h1>", unsafe_allow_html=True)
-        search_kw = st.text_input(
-            "Search projects by tool, keyword, or role:",
-            placeholder="Try: Next.js, Arduino, Manager, Developer",
-        ).strip().lower()
+        # -----------------------------------------------------------------------
+        # PAGE 4: Projects
+        # -----------------------------------------------------------------------
+        elif current_page == "Projects":
+            st.markdown("<h1>Projects & Works</h1>", unsafe_allow_html=True)
+            search_kw = st.text_input(
+                "Search projects by tool, keyword, or role:",
+                placeholder="Try: Next.js, Arduino, Manager, Developer",
+            ).strip().lower()
 
-        matched = [
-            p for p in PROJECTS
-            if not search_kw
-            or search_kw in p["title"].lower()
-            or search_kw in p["role"].lower()
-            or any(search_kw in t.lower() for t in p["tools"])
-        ]
+            matched = [
+                p for p in PROJECTS
+                if not search_kw
+                or search_kw in p["title"].lower()
+                or search_kw in p["role"].lower()
+                or any(search_kw in t.lower() for t in p["tools"])
+            ]
 
-        if not matched:
-            st.warning("No projects matched your criteria.")
-        else:
-            for prj in matched:
-                st.markdown(f"<h2>{prj['title']}</h2>", unsafe_allow_html=True)
-                tag_spans = " ".join(f'<span class="aero-tag">{t}</span>' for t in prj["tools"])
+            if not matched:
+                st.warning("No projects matched your criteria.")
+            else:
+                for prj in matched:
+                    st.markdown(f"<h2>{prj['title']}</h2>", unsafe_allow_html=True)
+                    tag_spans = " ".join(f'<span class="aero-tag">{t}</span>' for t in prj["tools"])
+                    st.markdown(
+                        f"""
+                        <div class="styled-containers">
+                            <div style="margin-bottom: 6px;">
+                                <strong>Role:</strong> <span style="color:#57fa6f;">{prj['role']}</span>
+                            </div>
+                            <div style="margin-bottom: 8px;">
+                                <strong>Stack:</strong> {tag_spans}
+                            </div>
+                            <div>
+                                <strong>Outcome:</strong>
+                                <p style="margin-top: 4px;">{prj['outcome']}</p>
+                            </div>
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
+
+        # -----------------------------------------------------------------------
+        # PAGE 5: Contact
+        # -----------------------------------------------------------------------
+        elif current_page == "Contact":
+            st.markdown("<h1>Contact & Guestbook</h1>", unsafe_allow_html=True)
+            f_col, i_col = st.columns([1.5, 1], gap="large")
+
+            with f_col:
+                st.markdown("<h2>Send a Message</h2>", unsafe_allow_html=True)
+                with st.form("contact_archive_form", clear_on_submit=True):
+                    c_name = st.text_input("Your Name")
+                    c_email = st.text_input("Your Email (optional)")
+                    c_topic = st.selectbox("Topic", ["General Inquiries", "Project Collaboration", "Feedback"])
+                    c_msg = st.text_area("Message", height=110)
+                    c_rating = st.slider("Rating", 1, 5, 5)
+                    c_reply = st.checkbox("I would like a reply")
+                    c_submit = st.form_submit_button("Send Message")
+
+                if c_submit:
+                    if not c_name.strip() or not c_msg.strip():
+                        st.error("Please enter both your name and message.")
+                    elif c_reply and "@" not in c_email:
+                        st.error("Please provide a valid email address so I can reply.")
+                    else:
+                        st.session_state.messages.append(
+                            {"From": c_name.strip(), "Topic": c_topic, "Rating": f"{c_rating}/5"}
+                        )
+                        st.success(f"Message received! Thank you, {c_name.strip()}.")
+
+            with i_col:
+                st.markdown("<h2>Direct Details</h2>", unsafe_allow_html=True)
                 st.markdown(
                     f"""
                     <div class="styled-containers">
-                        <div style="margin-bottom: 6px;">
-                            <strong>Role:</strong> <span style="color:#57fa6f;">{prj['role']}</span>
-                        </div>
-                        <div style="margin-bottom: 8px;">
-                            <strong>Stack:</strong> {tag_spans}
-                        </div>
-                        <div>
-                            <strong>Outcome:</strong>
-                            <p style="margin-top: 4px;">{prj['outcome']}</p>
-                        </div>
+                        <p><strong>Email:</strong> <a href="mailto:{EMAIL}">{EMAIL}</a></p>
+                        <p style="margin-top: 6px;"><strong>GitHub:</strong> <a href="{GITHUB}" target="_blank">{GITHUB}</a></p>
+                        <p style="margin-top: 6px; font-size: 11.5px; color: #a0a0a0;">
+                            Messages submitted via the guestbook form are recorded during your session. 
+                            For professional inquiries, reach out via email.
+                        </p>
                     </div>
                     """,
                     unsafe_allow_html=True,
                 )
 
-    # -----------------------------------------------------------------------
-    # PAGE 5: Contact
-    # -----------------------------------------------------------------------
-    elif current_page == "Contact":
-        st.markdown("<h1>Contact & Guestbook</h1>", unsafe_allow_html=True)
-        f_col, i_col = st.columns([1.8, 1.2], gap="medium")
-
-        with f_col:
-            st.markdown("<h2>Send a Message</h2>", unsafe_allow_html=True)
-            with st.form("contact_archive_form", clear_on_submit=True):
-                c_name = st.text_input("Your Name")
-                c_email = st.text_input("Your Email (optional)")
-                c_topic = st.selectbox("Topic", ["General Inquiries", "Project Collaboration", "Feedback"])
-                c_msg = st.text_area("Message", height=110)
-                c_rating = st.slider("Rating", 1, 5, 5)
-                c_reply = st.checkbox("I would like a reply")
-                c_submit = st.form_submit_button("Send Message")
-
-            if c_submit:
-                if not c_name.strip() or not c_msg.strip():
-                    st.error("Please enter both your name and message.")
-                elif c_reply and "@" not in c_email:
-                    st.error("Please provide a valid email address so I can reply.")
-                else:
-                    st.session_state.messages.append(
-                        {"From": c_name.strip(), "Topic": c_topic, "Rating": f"{c_rating}/5"}
-                    )
-                    st.success(f"Message received! Thank you, {c_name.strip()}.")
-
-        with i_col:
-            st.markdown("<h2>Direct Details</h2>", unsafe_allow_html=True)
-            st.markdown(
-                f"""
-                <div class="styled-containers">
-                    <p><strong>Email:</strong> <a href="mailto:{EMAIL}">{EMAIL}</a></p>
-                    <p style="margin-top: 6px;"><strong>GitHub:</strong> <a href="{GITHUB}" target="_blank">{GITHUB}</a></p>
-                    <p style="margin-top: 6px; font-size: 11.5px; color: #a0a0a0;">
-                        Messages submitted via the guestbook form are recorded during your session. 
-                        For professional inquiries, reach out via email.
-                    </p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-            if st.session_state.messages:
-                st.markdown("<h2>Messages Received</h2>", unsafe_allow_html=True)
-                st.dataframe(pd.DataFrame(st.session_state.messages), hide_index=True, use_container_width=True)
+                if st.session_state.messages:
+                    st.markdown("<h2>Messages Received</h2>", unsafe_allow_html=True)
+                    st.dataframe(pd.DataFrame(st.session_state.messages), hide_index=True, use_container_width=True)
 
 # ---------------------------------------------------------------------------
 # Semicircle Bottom Footer Bar (#pageNav)
